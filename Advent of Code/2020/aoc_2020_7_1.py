@@ -2,6 +2,7 @@ import re
 from functools import lru_cache
 from pprint import pprint
 
+
 def parse_bag_string(bag_string):
     # Remove 'bag' or 'bags' and '.'
     bag_string = re.sub(r'(\sbags)|(\sbag)|(\d)', '', bag_string)
@@ -20,8 +21,9 @@ def parse_bag_string(bag_string):
         contents = None
     else:
         contents = tuple(item.strip() for item in contents.split(','))
-    
+
     return (container, contents)
+
 
 @lru_cache(maxsize=1000)
 def contains_bag_colour(colour_bag, colour='shiny gold'):
@@ -38,7 +40,7 @@ with open("aoc_2020_7.txt", "r") as file:
     BAG_DATA = dict([parse_bag_string(line) for line in file])
 
 valid_bag_colours = [bag_colour
-               for bag_colour in BAG_DATA.keys()
-               if contains_bag_colour(bag_colour)]
+                     for bag_colour in BAG_DATA.keys()
+                     if contains_bag_colour(bag_colour)]
 
 print(len(valid_bag_colours))

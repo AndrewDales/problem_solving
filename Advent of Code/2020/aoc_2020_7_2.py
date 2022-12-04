@@ -2,13 +2,14 @@ import re
 from functools import lru_cache
 from pprint import pprint
 
+
 def parse_bag_string(bag_string):
     # Remove 'bag' or 'bags' and '.'
     bag_string = re.sub(r'(\sbags)|(\sbag)|(\.)', '', bag_string)
 
     # Find the numbers in the contents
     numbers = [int(num) for num in re.findall(r'[0-9]+', bag_string)]
-    
+
     # Split at 'contain'
     container, content_names = re.split('contain', bag_string)
 
@@ -23,9 +24,10 @@ def parse_bag_string(bag_string):
         contents = None
     else:
         contents = dict(zip((item.strip() for item in content_names.split(',')),
-                        (int(number) for number in numbers)))
-    
+                            (int(number) for number in numbers)))
+
     return (container, contents)
+
 
 @lru_cache(maxsize=1000)
 def count_lower_bags(colour_bag):
