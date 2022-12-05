@@ -21,5 +21,8 @@ Many of the [Advent of Code](https://adventofcode.com/) problems illustrate stan
 - [2021](https://github.com/AndrewDales/advent_of_code/tree/main/Advent%20of%20Code/2021)
 - [2022](https://github.com/AndrewDales/advent_of_code/tree/main/Advent%20of%20Code/2022)
   - Day 3: Use `set` and `intersection`
+  - Day 5: Explores the concept of the [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))
+    - Parsing the data was fiddly
+    - I used `defaultdict` and `namedtuple` from the `collections` module to hold data.
 
 ### Andrew Dales
