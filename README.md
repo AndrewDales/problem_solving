@@ -17,12 +17,13 @@ Many of the [Advent of Code](https://adventofcode.com/) problems illustrate stan
   - Day 11: This is an example of a 2D [cellular automaton](https://en.wikipedia.org/wiki/Cellular_automaton)
     - Solved by using a `dataclass` to hold the current state and tranistioning each cell depending on the transition rules
     - Solution involved writing a `find_neighbour` function to find all the neighbours of a given cell in an n-dimensional grid.
-  - Day 13: This requires solving linear modulo equations. Some [modulo maths is required](https://www.omnicalculator.com/math/chinese-remainder#example-using-the-chinese-remainder-theorem), but with this to hand, the programming is easy.
+  - Day 13: This requires solving linear modulo equations. Some [modulo maths](https://www.omnicalculator.com/math/chinese-remainder#example-using-the-chinese-remainder-theorem) is required, but with this to hand, the programming is easy.
 - [2021](https://github.com/AndrewDales/advent_of_code/tree/main/Advent%20of%20Code/2021)
 - [2022](https://github.com/AndrewDales/advent_of_code/tree/main/Advent%20of%20Code/2022)
   - Day 3: Use `set` and `intersection`
   - Day 5: Explores the concept of the [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type))
     - Parsing the data was fiddly
     - I used `defaultdict` and `namedtuple` from the `collections` module to hold data.
+  - Day 6: This problem is about recognising when the data from a signal starts. With [serial data transmission](https://learn.sparkfun.com/tutorials/serial-communication/all) a start bit is required to define when the data begins. 
 
 ### Andrew Dales
