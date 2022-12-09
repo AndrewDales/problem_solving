@@ -29,28 +29,37 @@ class RopePos:
     tail_from_head.update({mv: (nearer(mv[0]), nearer(mv[1])) for mv in two_away})
     directions = {"U": (1, 0), "R": (0, 1), "D": (-1, 0), "L": (0, -1)}
 
-    def __init__(self):
-        self.h_pos = (0, 0)
-        self.t_pos = (0, 0)
+    def __init__(self, num_sections):
+        self.num_sections = num_sections
+        self.sections_pos = [(0,0)] * num_sections
         self.tail_positions = {(0, 0)}
 
     def move_tail_head(self, direction: str, distance: int):
         dir_vector = self.directions[direction]
         for _ in range(distance):
-            self.h_pos = add_vector(self.h_pos, dir_vector)
-            current_tail_from_head = sub_vector(self.t_pos, self.h_pos)
-            new_tail_from_head = self.tail_from_head[current_tail_from_head]
-            self.t_pos = add_vector(self.h_pos, new_tail_from_head)
-            self.tail_positions.add(self.t_pos)
+            self.sections_pos[0] = add_vector(self.sections_pos[0], dir_vector)
+            prev_section_pos = self.sections_pos[0]
+            for i, sect_pos in enumerate(self.sections_pos[1:], 1):
+                cur_pos_to_prev_section = sub_vector(sect_pos, prev_section_pos)
+                new_pos_to_prev_section= self.tail_from_head[cur_pos_to_prev_section]
+                self.sections_pos[i] = add_vector(prev_section_pos, new_pos_to_prev_section)
+                prev_section_pos = self.sections_pos[i]
 
-        # print(f'{self.h_pos=} {self.t_pos=}')
+            self.tail_positions.add(self.sections_pos[-1])
+
+        # print(f'{self.sections_pos[0]=} {self.sections_pos[1]=}')
 
     def move_from_sequence(self, sequence):
         for mv_dir, mv_dis in sequence:
             self.move_tail_head(mv_dir, mv_dis)
 
 
-rop = RopePos()
+rop = RopePos(2)
 rop.move_from_sequence(move_sequence)
 
 print(f'Solution to Problem 1 is {len(rop.tail_positions)}')
+
+rop_multi = RopePos(10)
+rop_multi.move_from_sequence(move_sequence)
+
+print(f'Solution to Problem 2 is {len(rop_multi.tail_positions)}')
