@@ -25,5 +25,6 @@ Many of the [Advent of Code](https://adventofcode.com/) problems illustrate stan
     - Parsing the data was fiddly
     - I used `defaultdict` and `namedtuple` from the `collections` module to hold data.
   - Day 6: This problem is about recognising when the data from a signal starts. With [serial data transmission](https://learn.sparkfun.com/tutorials/serial-communication/all) a start bit is required to define when the data begins. 
+  - Day 10: A simulation of a CPU clock with actions taking one or two clicks on the clock. The second part of the problem also involves a monitor drawing one pixel at each click on the clock.
 
 ### Andrew Dales
