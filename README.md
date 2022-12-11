@@ -15,7 +15,7 @@ Many of the [Advent of Code](https://adventofcode.com/) problems illustrate stan
     - I used a State `dataclass` from the `dataclasses` module to keep track of the current state of a program run.
   - Day 10: Solved using a [recurrence relation](https://en.wikipedia.org/wiki/Recurrence_relation)
   - Day 11: This is an example of a 2D [cellular automaton](https://en.wikipedia.org/wiki/Cellular_automaton)
-    - Solved by using a `dataclass` to hold the current state and tranistioning each cell depending on the transition rules
+    - Solved by using a `dataclass` to hold the current state and transitioning each cell depending on the transition rules
     - Solution involved writing a `find_neighbour` function to find all the neighbours of a given cell in an n-dimensional grid.
   - Day 13: This requires solving linear modulo equations. Some [modulo maths](https://www.omnicalculator.com/math/chinese-remainder#example-using-the-chinese-remainder-theorem) is required, but with this to hand, the programming is easy.
 - [2021](https://github.com/AndrewDales/advent_of_code/tree/main/Advent%20of%20Code/2021)

@@ -1,110 +1,115 @@
 from dataclasses import dataclass, field
 from pprint import pprint
 
+with open("aoc_2022_7.txt") as file:
+    commands_from_file = file.readlines()
+
 
 @dataclass
-class SystemContent:
+class File:
     name: str
-    parent: str | None
-    size: int | None
-    type: str
-    children: set[str] = field(default_factory=set)
+    size: int
+    parent: str | None = None
 
-    def __post_init__(self):
-        if self.type == "dir" and self.parent:
-            self.name += "_" + self.parent
+    def __str__(self):
+        return f'{self.name} (file, size={self.size})'
 
 
-explored_content = dict()
+@dataclass
+class Directory:
+    name: str
+    parent: str = None
+    children: dict[str: object] = field(default_factory=lambda: dict())
 
+    @property
+    def size(self):
+        size = 0
+        for child in self.children.values():
+            size += child.size
+        return size
 
-def parse_line(line_content: str, cd_name: str):
-    cd = explored_content[cd_name]
-    content_parts = line_content.strip().split()
-    system_content = None
-    # if cd is None:
-    #     parent_name = None
-    # else:
-    parent_name = cd.name
-
-    if content_parts[0] == "$":
-        command = content_parts[1]
-        if command == "cd":
-            dir_name = content_parts[2]
-            if dir_name[:2] == '..':
-                system_content = explored_content[cd.parent]
+    def show_tree(self, indent=""):
+        print(indent + "- " + str(self))
+        indent += "  "
+        for child in self.children.values():
+            if isinstance(child, File):
+                print(indent + "- " + str(child))
             else:
-                system_content = SystemContent(name=dir_name,
-                                               parent=parent_name,
-                                               size=None,
-                                               type="dir",
-                                               )
+                child.show_tree(indent)
+
+    def __str__(self):
+        return f'{self.name} (dir, size={self.size})'
+
+
+def parse_command(command_line: str) -> tuple[str, str | None]:
+    parts = command_line[2:].strip().split()
+    cmd, *other = parts
+    if len(parts) > 1:
+        operand = parts[1]
     else:
-        content_name = content_parts[1]
-        command = "write"
-        if content_parts[0] == "dir":
-            system_content = SystemContent(name=content_name,
-                                           parent=parent_name,
-                                           size=None,
-                                           type="dir")
+        operand = None
+    return cmd, operand
+
+
+def parse_content(content_line: str) -> File | Directory:
+    parts = content_line.strip().split()
+    if parts[0] == "dir":
+        content = Directory(name=parts[1])
+    elif parts[0].isdigit():
+        content = File(name=parts[1], size=int(parts[0]))
+    else:
+        raise TypeError(f"File or directory not recognised in {content_line}")
+    return content
+
+
+def read_file_structure(command_data: list[str]) -> Directory:
+    root = Directory(name="/")
+    current_directory = root
+    current_children = {name for name in root.children}
+
+    for line in command_data[1:]:
+        if line[0] == "$":
+            operation, dir_name = parse_command(line)
+            if operation == "ls":
+                current_children = current_directory.children
+                current_directory.children = dict()
+            elif operation == "cd":
+                if dir_name == "..":
+                    current_directory = current_directory.parent
+                else:
+                    current_directory = current_directory.children[dir_name]
+
         else:
-            size = int(content_parts[0])
-            system_content = SystemContent(name=content_name,
-                                           parent=parent_name,
-                                           size=size,
-                                           type="file"
-                                           )
-    return system_content, command
+            dir_content = parse_content(line)
+            dir_content.parent = current_directory
+            if dir_content.name in current_children:
+                dir_content = current_children[dir_content.name]
+            current_directory.children[dir_content.name] = dir_content
+    return root
 
 
-def find_size(content_name, file_structure):
-    system_content = file_structure[content_name]
-    size = 0
+def find_dir_sizes(root_dir: Directory, dir_sizes=None):
+    if dir_sizes is None:
+        dir_sizes = []
 
-    if system_content.type == "file":
-        size = system_content.size
-    elif system_content.type == "dir":
-        for child in system_content.children:
-            size += find_size(child, file_structure)
-    return size
+    if isinstance(root_dir, Directory):
+        dir_sizes.append(root_dir.size)
 
+    for child in root_dir.children.values():
+        if isinstance(child, Directory):
+            dir_sizes = find_dir_sizes(child, dir_sizes)
 
-def print_tree(dir_item: SystemContent, indent=""):
-    print(indent + dir_item.name)
-    for child in dir_item.children:
-        if child in explored_content:
-            print_tree(explored_content[child], indent+"\t")
+    return dir_sizes
 
 
-with open("aoc_2022_7.txt") as file:
-    command_data = file.readlines()
+my_root = read_file_structure(commands_from_file)
+# print(my_root.size)
+# my_root.show_tree()
+directory_sizes = find_dir_sizes(my_root)
 
-root = SystemContent(name="/", parent=None, type="dir", size=None)
-explored_content[root.name] = root
-cd_name = root.name
+print(f"Solution to problem 1 is {sum(ds for ds in directory_sizes if ds <= 100_000)}")
 
-for line in command_data[1:]:
-    current_item, action = parse_line(line, cd_name)
-    if action == "ls":
-        pass
-    elif action == "cd":
-        cd_name = current_item.name
-        #if current_item.name not in explored_content:
-        explored_content[cd_name] = current_item
-        # print(cd_name)
-    elif action == "write":
-        explored_content[cd_name].children.add(current_item.name)
-        if current_item.type == "file":
-            explored_content[current_item.name] = current_item
+unused_space = 70_000_000 - my_root.size
+rqd_space = 30_000_000 - unused_space
 
-# pprint(explored_content)
-
-sizes = {}
-
-for name, file_item in explored_content.items():
-    if file_item.type == "dir":
-        sizes[name] = find_size(name, explored_content)
-
-small_dir_sizes = sum(val for val in sizes.values() if val <= 100_000)
-
-print(small_dir_sizes)
+print(f'Solution to problem 2 is {min(ds for ds in directory_sizes if ds >= rqd_space)}')
