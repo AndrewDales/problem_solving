@@ -19,7 +19,7 @@ class File:
 class Directory:
     name: str
     parent: str = None
-    children: dict[str: object] = field(default_factory=lambda: dict())
+    children: dict[str: object] = field(default_factory=dict)
 
     @property
     def size(self):
