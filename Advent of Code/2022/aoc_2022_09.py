@@ -47,7 +47,7 @@ class RopePos:
 
             self.tail_positions.add(self.sections_pos[-1])
 
-        # print(f'{self.sections_pos[0]=} {self.sections_pos[1]=}')
+        # print(f'{root_dir.sections_pos[0]=} {root_dir.sections_pos[1]=}')
 
     def move_from_sequence(self, sequence):
         for mv_dir, mv_dis in sequence:

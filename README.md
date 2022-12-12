@@ -15,7 +15,7 @@ Many of the [Advent of Code](https://adventofcode.com/) problems illustrate stan
     - I used a State `dataclass` from the `dataclasses` module to keep track of the current state of a program run.
   - Day 10: Solved using a [recurrence relation](https://en.wikipedia.org/wiki/Recurrence_relation)
   - Day 11: This is an example of a 2D [cellular automaton](https://en.wikipedia.org/wiki/Cellular_automaton)
-    - Solved by using a `dataclass` to hold the current state and tranistioning each cell depending on the transition rules
+    - Solved by using a `dataclass` to hold the current state and transitioning each cell depending on the transition rules
     - Solution involved writing a `find_neighbour` function to find all the neighbours of a given cell in an n-dimensional grid.
   - Day 13: This requires solving linear modulo equations. Some [modulo maths](https://www.omnicalculator.com/math/chinese-remainder#example-using-the-chinese-remainder-theorem) is required, but with this to hand, the programming is easy.
 - [2021](https://github.com/AndrewDales/advent_of_code/tree/main/Advent%20of%20Code/2021)
@@ -25,5 +25,10 @@ Many of the [Advent of Code](https://adventofcode.com/) problems illustrate stan
     - Parsing the data was fiddly
     - I used `defaultdict` and `namedtuple` from the `collections` module to hold data.
   - Day 6: This problem is about recognising when the data from a signal starts. With [serial data transmission](https://learn.sparkfun.com/tutorials/serial-communication/all) a start bit is required to define when the data begins. 
+  - Day 7: The hardest challenges so far. This involved making a [tree structure](https://en.wikipedia.org/wiki/Tree_(data_structure)) from file directory information.
+    - I created a separate `dataclass` for files and directories. 
+    - `ls` and `cd` commands cound be read from the list of instructions and used to create files and directories with parents and children
+    - A tree traversal was required to find the sizes of all the files contained in each directory
+  - Day 10: A simulation of a CPU clock with actions taking one or two clicks on the clock. The second part of the problem also involves a monitor drawing one pixel at each click on the clock.
 
 ### Andrew Dales
