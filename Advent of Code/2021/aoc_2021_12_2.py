@@ -23,7 +23,7 @@ while path_stack:
         
         # Check if there are any duplicates in the small caves in the current_path
         small_caves_visited = tuple(node for node in current_path if node.islower())
-        # If some small caves have been visited more than once, can't visit any small caves again 
+        # If some small caves have been p_visited more than once, can't visit any small caves again
         if len(small_caves_visited) > len(set(small_caves_visited)):
             no_visit = {'start'} | set(small_caves_visited)
         # Else, can't visit the start again

@@ -45,7 +45,7 @@ class CaveSearch:
             for neighbour in neighbours:
                 heapq.heappush(priority_queue, (current_item[0] + data[neighbour], neighbour))
             visited[current_cell] = current_cost
-#             if len(visited) % 1000 == 0:
+#             if len(p_visited) % 1000 == 0:
 #                 print(f'{current_cell=}, {current_cost=}, Length priority queue = {len(priority_queue)}') 
         return visited, priority_queue    
         

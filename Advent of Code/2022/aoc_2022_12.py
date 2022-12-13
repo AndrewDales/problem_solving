@@ -1,9 +1,5 @@
-import heapq
 from collections import deque
 from dataclasses import dataclass
-import numpy as np
-import itertools
-from math import inf
 
 with open("aoc_2022_12.txt") as file:
     file_contents = [line.strip() for line in file]
@@ -46,7 +42,7 @@ class Node:
     parent: object
     distance: int = 0
 
-    def find_unvisited_neighbours(self, elevation_map, visited, reverse=False):
+    def find_unvisited_neighbours(self, elevation_map, p_visited, reverse=False):
         neighbours = []
         for d in DIRECTIONS:
             i, j = self.location[0] + d[0], self.location[1] + d[1]
@@ -58,8 +54,8 @@ class Node:
             else:
                 height_condition = (elevation_map[(i, j)] <= self.height + 1)
 
-            if height_condition and (i, j) not in visited:
-                neighbours.append((i,j))
+            if height_condition and (i, j) not in p_visited:
+                neighbours.append((i, j))
         return neighbours
 
 

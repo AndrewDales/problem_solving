@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 with open("aoc_2022_13.txt") as file:
     file_contents = [line.strip() for line in file]
 
@@ -43,7 +45,26 @@ def check_pair(lol_1, lol_2):
 
 
 correct_orders = [(i, check_pair(*packet)) for i, packet in enumerate(packets, 1)]
-for i, packet in enumerate(packets, 1):
-    print(i, check_pair(*packet))
+# for i, packet in enumerate(packets, 1):
+#     print(i, check_pair(*packet))
 
-print(sum(i for i, j in correct_orders if j))
+print(f'Solution to part 1 is {sum(i for i, j in correct_orders if j)}')
+
+
+@dataclass
+class Packet:
+    data: list
+
+    def __gt__(self, other):
+        return check_pair(other.data, self.data)
+
+
+all_packets = [Packet(eval(file_contents[i])) for i in range(0, len(file_contents), 3)] + \
+              [Packet(eval(file_contents[i])) for i in range(1, len(file_contents), 3)] + \
+              [Packet([[2]]), Packet([[6]])]
+
+all_packets.sort()
+pos_2 = all_packets.index(Packet([[2]]))+1
+pos_6 = all_packets.index(Packet([[6]]))+1
+
+print(f'Solution to part 2 is {pos_6 * pos_2}')
