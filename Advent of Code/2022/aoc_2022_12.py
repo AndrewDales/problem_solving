@@ -44,42 +44,72 @@ class Node:
     location: tuple[int, int]
     height: int
     parent: object
+    distance: int = 0
 
-    def find_unvisited_neighbours(self, elevation_map, visited):
+    def find_unvisited_neighbours(self, elevation_map, visited, reverse=False):
         neighbours = []
         for d in DIRECTIONS:
             i, j = self.location[0] + d[0], self.location[1] + d[1]
-            if ((0 <= i < NUM_ROWS) and
-                    (0 <= j < NUM_COLS) and
-                    (elevation_map[(i, j)] <= self.height + 1) and
-                    ((i, j) not in visited)
-            ):
-                neighbours.append(Node((i, j), elevation_map[(i, j)], self))
+            if not ((0 <= i < NUM_ROWS) and 0 <= j < NUM_COLS):
+                continue
+
+            if reverse:
+                height_condition = (elevation_map[(i, j)] >= self.height - 1)
+            else:
+                height_condition = (elevation_map[(i, j)] <= self.height + 1)
+
+            if height_condition and (i, j) not in visited:
+                neighbours.append((i,j))
         return neighbours
 
 
 elevations, start, finish = find_elevations(file_contents)
-start_node = Node(start, 0, None)
+start_node = Node(location=start, height=0, parent=None, distance=0)
 current_node = start_node
 
 node_queue = deque()
-visited = dict()
+node_directory = {start: start_node}
+visited = set()
 
 while current_node.location != finish:
-    visited[current_node.location] = current_node
-    for neighbour in current_node.find_unvisited_neighbours(elevations, visited.keys()):
-        if neighbour.location not in visited:
-            node_queue.append(neighbour)
-    new_node = node_queue.popleft()
-    if new_node.location not in visited:
-        current_node = new_node
-        print(current_node)
+    visited.add(current_node.location)
+    for neighbour in current_node.find_unvisited_neighbours(elevations, node_directory):
+        node_queue.append(neighbour)
+        node_directory[neighbour] = Node(location=neighbour,
+                                         height=elevations[neighbour],
+                                         parent=current_node,
+                                         distance=current_node.distance + 1)
+    new_location = node_queue.popleft()
+    if new_location not in visited:
+        current_node = node_directory[new_location]
+        # print(current_node.location)
 
-# finish = current_node
-# path = []
-#
-# while current_node.parent:
-#     path.append(current_node)
-#     current_node = current_node.parent
-#
-# print(len(path))
+finish_node = current_node
+
+print(f'Solution to part 1 = {finish_node.distance}')
+
+finish_node.parent = None
+finish_node.distance = 0
+node_queue = deque()
+node_directory = {finish: finish_node}
+visited = set()
+
+while current_node.height != 0:
+    visited.add(current_node.location)
+    for neighbour in current_node.find_unvisited_neighbours(elevations, node_directory, reverse=True):
+        node_queue.append(neighbour)
+        node_directory[neighbour] = Node(location=neighbour,
+                                         height=elevations[neighbour],
+                                         parent=current_node,
+                                         distance=current_node.distance + 1)
+    new_location = node_queue.popleft()
+    if new_location not in visited:
+        current_node = node_directory[new_location]
+
+print(f'Solution to part 2 = {current_node.distance}')
+
+path = []
+
+while current_node.parent:
+    path.append((current_node.location, current_node.height))
+    current_node = current_node.parent
