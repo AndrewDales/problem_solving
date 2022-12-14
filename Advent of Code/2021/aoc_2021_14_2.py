@@ -12,7 +12,7 @@ class Polymer:
     def __init__(self, start_code, insert_dict):
         self.code = start_code
         self.insert_dict = insert_dict
-        # self.pairs are the continous pairs in start_code
+        # sand_loc.pairs are the continous pairs in start_code
         self.pairs = Counter(p0 + p1 for p0, p1 in pairwise(self.code))
         
     def insert_into_pairs(self):

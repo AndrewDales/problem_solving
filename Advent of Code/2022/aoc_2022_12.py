@@ -33,10 +33,10 @@ def find_elevations(data):
 
 @dataclass
 class Node:
-    # def __init__(self, location, height, parent=None):
-    #     self.location = location
-    #     self.height = height
-    #     self.parent = parent
+    # def __init__(sand_loc, location, height, parent=None):
+    #     sand_loc.location = location
+    #     sand_loc.height = height
+    #     sand_loc.parent = parent
     location: tuple[int, int]
     height: int
     parent: object
