@@ -24,10 +24,7 @@ class Cave:
         self.sand_locations = set()
         self.bottom_row = max(j for _, j in self.rock_locations)
         self.initial_sand_pos = (500, 0)
-
-    @property
-    def blocks(self):
-        return self.rock_locations | self.sand_locations
+        self.blocks = self.rock_locations | self.sand_locations
 
     def place_sand(self):
         sand_loc = self.initial_sand_pos
@@ -52,6 +49,7 @@ class Cave:
         # Runs if while loop end (sand_falling = False)
         else:
             self.sand_locations.add(sand_loc)
+            self.blocks.add(sand_loc)
 
         return sand_loc
 
@@ -59,7 +57,8 @@ class Cave:
         sand_stopped = False
         while not sand_stopped:
             sand_location = self.place_sand()
-            print(len(self.sand_locations))
+            # if len(self.sand_locations) % 1000 == 0:
+            #     print(len(self.sand_locations))
             if (sand_location[1] >= self.bottom_row) or (sand_location == self.initial_sand_pos):
                 sand_stopped = True
 
@@ -68,15 +67,16 @@ class CaveFloor(Cave):
     def __init__(self, rock_locations: set[tuple[int, int]]):
         super().__init__(rock_locations)
         self.bottom_row = max(j for _, j in self.rock_locations) + 2
-        self.rock_locations.update(find_points_path(
+        self.rock_locations.update(bottom_blocks := find_points_path(
             (500 - self.bottom_row, self.bottom_row), (500 + self.bottom_row, self.bottom_row)))
+        self.blocks.update(bottom_blocks)
 
 
 my_rocks = Cave.parse_file(file_contents)
 my_cave = Cave(my_rocks)
 my_cave.pour_sand()
-print(f'Units of sand in cave = {len(my_cave.sand_locations)}')
+print(f'Units of sand in cave problem 1 = {len(my_cave.sand_locations)}')
 
 my_second_cave = CaveFloor(my_rocks)
 my_second_cave.pour_sand()
-print(f'Units of sand in cave = {len(my_second_cave.sand_locations)}')
+print(f'Units of sand in cave problem 2 = {len(my_second_cave.sand_locations)}')
