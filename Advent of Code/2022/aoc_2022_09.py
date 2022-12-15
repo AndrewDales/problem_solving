@@ -54,12 +54,13 @@ class RopePos:
             self.move_tail_head(mv_dir, mv_dis)
 
 
-rop = RopePos(2)
-rop.move_from_sequence(move_sequence)
+if __name__ == "__main__":
+    rop = RopePos(2)
+    rop.move_from_sequence(move_sequence)
 
-print(f'Solution to Problem 1 is {len(rop.tail_positions)}')
+    print(f'Solution to Problem 1 is {len(rop.tail_positions)}')
 
-rop_multi = RopePos(10)
-rop_multi.move_from_sequence(move_sequence)
+    rop_multi = RopePos(10)
+    rop_multi.move_from_sequence(move_sequence)
 
-print(f'Solution to Problem 2 is {len(rop_multi.tail_positions)}')
+    print(f'Solution to Problem 2 is {len(rop_multi.tail_positions)}')
