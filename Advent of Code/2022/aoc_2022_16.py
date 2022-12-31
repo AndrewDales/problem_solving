@@ -14,9 +14,6 @@ class Valve:
     release_rate: int = 0
     children: tuple[str, ...] = field(default_factory=list)
 
-    # def open_valve(self):
-    #     self.open = True
-
 
 @dataclass(order=True)
 class ValvePath:
