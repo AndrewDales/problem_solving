@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Callable
 
-with open("aoc_2022_23_test.txt") as file:
+with open("aoc_2022_23.txt") as file:
     file_lines = [line.strip() for line in file]
 
 elves_initial = {(i, j) for i, line in enumerate(file_lines) for j, mk in enumerate(line) if mk == '#'}
