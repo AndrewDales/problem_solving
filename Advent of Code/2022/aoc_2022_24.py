@@ -1,10 +1,8 @@
-from functools import lru_cache
-from typing import FrozenSet
-from math import lcm
 import heapq as hq
+from functools import lru_cache
+from math import lcm
 
-
-with open("aoc_2022_24_test.txt") as file:
+with open("aoc_2022_24.txt") as file:
     file_lines = [line.strip() for line in file]
 
 WALLS = frozenset({(i, j) for i, line in enumerate(file_lines) for j, mk in enumerate(line) if mk == '#'})
@@ -43,7 +41,7 @@ def move_all_blizzards(num_moves: int):
     else:
         blizzards, _ = move_all_blizzards(num_moves - 1)
         new_blizzards = frozenset({move_blizzard(bz) for bz in blizzards})
-        new_locs = frozenset(bz[0] for bz in blizzards)
+        new_locs = frozenset(bz[0] for bz in new_blizzards)
         return new_blizzards, new_locs
 
 
@@ -87,8 +85,9 @@ class Valley:
         new_blizzards, new_blizzard_locs = move_all_blizzards((self.rounds + 1) % BLIZZARD_LCM)
         neighbours = self.get_neighbours()
         neighbours.append(self.current_position)
-        return [Valley(ngh, self.rounds + 1, exit_point=self.exit_point, parent=self) for ngh in neighbours
-                if ngh not in new_blizzard_locs]
+        neighbour_valleys = [Valley(ngh, self.rounds + 1, exit_point=self.exit_point, parent=self) for ngh in neighbours
+                             if ngh not in new_blizzard_locs]
+        return neighbour_valleys
 
     def show_grid(self):
         blizzards, blizzard_locs = move_all_blizzards(self.rounds % BLIZZARD_LCM)
@@ -113,13 +112,11 @@ class Valley:
 
 
 def find_path(current_round=0, entry=ENTRY_POINT, exit=EXIT_POINT):
-
     current_valley = Valley(current_position=entry,
                             rounds=current_round,
                             exit_point=exit)
-    min_dist = current_valley.distance
+    min_dist = WIDTH + HEIGHT
 
-    i = 0
     visited = set()
     pq = []
     hq.heappush(pq, current_valley)
@@ -130,6 +127,7 @@ def find_path(current_round=0, entry=ENTRY_POINT, exit=EXIT_POINT):
         if current_valley.distance < min_dist:
             min_dist = current_valley.distance
             print(current_valley.rounds, current_valley.distance)
+            # current_valley.show_grid()
         if current_valley in visited:
             continue
         visited.add(current_valley)
@@ -140,19 +138,16 @@ def find_path(current_round=0, entry=ENTRY_POINT, exit=EXIT_POINT):
             for ngh in neighbours:
                 if ngh not in visited:
                     hq.heappush(pq, ngh)
-        # i += 1
-        # if i >= 1_000:
-        #     break
 
     return current_valley
 
 
 trip_there = find_path()
-# print("Arrived at exit 1st time")
-# trip_back = find_path(current_round=trip_there.rounds, entry=trip_there.current_position, exit=ENTRY_POINT)
-# print("Arrived back at start")
-# trip_final = find_path(current_round=trip_back.rounds, entry=trip_back.current_position, exit=EXIT_POINT)
-# print("Final arrival at exit\n")
-#
+print("Arrived at exit 1st time")
+trip_back = find_path(current_round=trip_there.rounds, entry=trip_there.current_position, exit=ENTRY_POINT)
+print("Arrived back at start")
+trip_final = find_path(current_round=trip_back.rounds, entry=trip_back.current_position, exit=EXIT_POINT)
+print("Final arrival at exit\n")
+
 print(f"Time for first trip = {trip_there.rounds}")
-# print(f"Time for total trip = {trip_final.rounds}")
+print(f"Time for total trip = {trip_final.rounds}")
