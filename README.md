@@ -7,7 +7,7 @@ Many of the [Advent of Code](https://adventofcode.com/) problems illustrate stan
 - [2020](https://github.com/AndrewDales/advent_of_code/tree/main/Advent%20of%20Code/2020)
   - Day 3: Use `defaultdict(int)` to set up a labelled counter that will automatically start at zero.
   - Day 4: Use [regex](https://en.wikipedia.org/wiki/Regular_expression) to recognise a valid hex colour code. `^#[A-Fa-f0-9]{6}$` matches a hex colour code such as #ee45a5.
-  - Day 6: Use `my_set[0].intersection(*my_set[1:]` to find the intersection of a list of sets.
+  - Day 6: Use `my_set[0].intersection(*my_set[1:])` to find the intersection of a list of sets.
   - Day 7: This problem involves a [tree](https://en.wikipedia.org/wiki/Tree_(data_structure)) structure.
     - Use [regex](https://en.wikipedia.org/wiki/Regular_expression) to help parse each line, including `re.findall('re.findall(r'[0-9]+', my_string')` to find all the numbers in a string
     - Use a [recursive depth first search](https://www.techiedelight.com/depth-first-search/) to traverse the tree.
