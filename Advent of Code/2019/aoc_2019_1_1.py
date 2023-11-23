@@ -1,4 +1,4 @@
-with open("aoc_input_2019_1.txt", "r") as file:
+with open("data/aoc_input_2019_1.txt", "r") as file:
     numbers = [int(line.strip()) for line in file]
 
 

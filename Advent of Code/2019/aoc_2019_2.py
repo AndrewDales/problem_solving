@@ -1,6 +1,6 @@
 import operator as op
 
-with open("aoc_input_2019_2.txt", "r") as file:
+with open("data/aoc_input_2019_2.txt", "r") as file:
     line = file.readline()
     numbers_orig = [int(num) for num in line.strip().split(",")]
 
