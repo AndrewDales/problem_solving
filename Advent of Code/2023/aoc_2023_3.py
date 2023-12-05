@@ -1,5 +1,4 @@
 import re
-from math import prod
 
 with open("data/aoc_input_2023_3.txt") as file:
     file_contents = file.read()
