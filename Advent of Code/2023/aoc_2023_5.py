@@ -1,7 +1,7 @@
 import re
 from operator import itemgetter
 
-with open("data/aoc_test_2023_5.txt") as file:
+with open("data/aoc_input_2023_5.txt") as file:
     file_contents = file.read()
 
 chunks = file_contents.split(':')
@@ -40,7 +40,11 @@ class MapRanges:
                 dest_ranges = [p_range]
             else:
                 range_end = low_higher_source_range.start
-                dest_ranges = [p_range[:range_end]] + self.map_range(p_range[range_end:])
+                if range_end in p_range:
+                    cut = p_range.index(range_end)
+                    dest_ranges = [p_range[:cut]] + self.map_range(p_range[cut:])
+                else:
+                    dest_ranges = [p_range]
         else:
             if p_range.stop in source_range:
                 dest_ranges = [range(dest_start,
@@ -48,7 +52,7 @@ class MapRanges:
             else:
                 dest_ranges = [range(dest_start,
                                      self.map_value(source_range.stop - 1)[0] + 1)] + self.map_range(
-                    p_range[source_range.stop:])
+                    range(source_range.stop, p_range.stop))
 
         return dest_ranges
 
