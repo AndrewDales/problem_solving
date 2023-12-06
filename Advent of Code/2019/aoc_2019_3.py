@@ -8,7 +8,7 @@ class Wire:
     directions = {'R': (1, 0),
                   'U': (0, 1),
                   'L': (-1, 0),
-                  'D': (0,-1),
+                  'd': (0,-1),
                   }
 
     def __init__(self):

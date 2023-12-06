@@ -27,7 +27,7 @@ class RopePos:
                      if (abs(i) == 2 or abs(j) == 2))
     tail_from_head = {mv: mv for mv in no_move}
     tail_from_head.update({mv: (nearer(mv[0]), nearer(mv[1])) for mv in two_away})
-    directions = {"U": (1, 0), "R": (0, 1), "D": (-1, 0), "L": (0, -1)}
+    directions = {"U": (1, 0), "R": (0, 1), "d": (-1, 0), "L": (0, -1)}
 
     def __init__(self, num_sections):
         self.num_sections = num_sections
