@@ -24,7 +24,7 @@ class MapRanges:
             source_range = None
         return dest_value, source_range
 
-    def map_value_list(self, source_list):
+    def map_value_list(self, source_list: list[int]) -> list[int]:
         return [self.map_value(i)[0] for i in source_list]
 
     def map_range(self, p_range):
