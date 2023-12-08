@@ -17,7 +17,19 @@ def parse_search(search_item):
     return search_value
 
 
-def check_adjacent(p_number, p_symbol):
+def check_adjacent(p_number: dict, p_symbol: dict) -> bool:
+    """
+    Checks whether a dictionary representing a number is next to a dictionary representing a symbol
+    Parameters
+    ----------
+    p_number: number dictionary
+    p_symbol: symbol dictionary
+
+    Returns
+    -------
+    bool: True if the number and symbol are next to each other
+
+    """
     col_check = abs(p_number['column'] - p_symbol['column']) <= 1
     row_check = (p_number['row_start'] <= (p_symbol['row_end'] + 1) and
                  p_number['row_end'] >= (p_symbol['row_start'] - 1))
