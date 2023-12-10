@@ -33,7 +33,6 @@ def find_path_length(start_loc, prob=1):
             at_end = True
         if current_loc[-1] == 'Z' and prob == 2:
             at_end = True
-    # print(count)
     return count
 
 
