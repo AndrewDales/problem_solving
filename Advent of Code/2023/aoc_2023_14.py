@@ -57,7 +57,7 @@ class Dish:
                                       default=-1) + 1
                         stone.column = new_pos
                     elif direction == 1:
-                        new_pos = min((stone.column for stone in self.row(stone.row, min_col=col)),
+                        new_pos = min((stone.column for stone in self.row(stone.row, min_col=col+1)),
                                       default=self.n_columns) - 1
                         stone.column = new_pos
 
@@ -66,17 +66,17 @@ class Dish:
             for i in range(1, self.n_rows):
                 self.move_line(row=i, direction=-1)
         elif direction == 'S':
-            for i in range(self.n_rows, 0, -1):
+            for i in range(self.n_rows - 1, 0, -1):
                 self.move_line(row=i-1, direction=1)
         elif direction == 'W':
             for i in range(1, self.n_columns):
                 self.move_line(col=i, direction=-1)
         elif direction == 'E':
-            for i in range(self.n_columns, 0, -1):
+            for i in range(self.n_columns - 1, 0, -1):
                 self.move_line(col=i-1, direction=1)
 
     def cycle(self):
-        for d in 'NEWS':
+        for d in 'NWSE':
             self.tilt(d)
 
     def calc_load(self):
@@ -105,16 +105,23 @@ def parse_grid(grid_string):
 
 
 dish = Dish(*parse_grid(file_contents))
-print(dish)
-
 dish.tilt('N')
-print(dish)
-dish.tilt('E')
-print(dish)
+print(f'Solution to Day 14, Problem 1 is {dish.calc_load()}')
 
-# for i in range(1, 4):
-#     dish.cycle()
-#     print(i)
-#     print(dish)
+# dish.tilt('N')
+# print(dish)
+# dish.tilt('W')
+# print(dish)
+# dish.tilt('S')
+# print(dish)
+# dish.tilt('E')
+# print(dish)
+
+dish = Dish(*parse_grid(file_contents))
+
+loads = []
+for i in range(100):
+    dish.cycle()
+    loads.append((dish.calc_load()))
 
 # print(dish.calc_load())
