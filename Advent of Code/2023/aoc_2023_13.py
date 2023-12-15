@@ -5,7 +5,7 @@ with open('data/aoc_input_2023_13.txt') as file:
     file_contents = file.read()
 
 Block = namedtuple('Block', ['n_rows', 'n_columns', 'cells'])
-Cell = namedtuple('Cell', 'row column')
+Cell = namedtuple('Stone', 'row column')
 
 
 def parse_block(block_string):
