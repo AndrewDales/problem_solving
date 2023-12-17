@@ -1,9 +1,7 @@
 import re
-from collections import namedtuple
 from dataclasses import dataclass
 
-# with open('data/aoc_input_2023_14.txt') as file:
-with open('data/aoc_test_2023_14.txt') as file:
+with open('data/aoc_input_2023_14.txt') as file:
     file_contents = file.read()
 
 
@@ -108,20 +106,34 @@ dish = Dish(*parse_grid(file_contents))
 dish.tilt('N')
 print(f'Solution to Day 14, Problem 1 is {dish.calc_load()}')
 
-# dish.tilt('N')
-# print(dish)
-# dish.tilt('W')
-# print(dish)
-# dish.tilt('S')
-# print(dish)
-# dish.tilt('E')
-# print(dish)
-
 dish = Dish(*parse_grid(file_contents))
 
-loads = []
-for i in range(100):
-    dish.cycle()
-    loads.append((dish.calc_load()))
+load_n = 1000000000
+dish_strings = {0: str(dish)}
+dish_loads = {0: dish.calc_load()}
+found_equal = False
+count = 1
+previous_dish = 0
 
-# print(dish.calc_load())
+while not found_equal:
+    dish.cycle()
+    dish_string = str(dish)
+
+    print(count)
+
+    if dish_string in dish_strings.values():
+        previous_dish = [key for key, value in dish_strings.items() if value == dish_string][-1]
+        found_equal = True
+        dish_strings[count] = dish_string
+        dish_loads[count] = dish.calc_load()
+    else:
+        dish_strings[count] = dish_string
+        dish_loads[count] = dish.calc_load()
+        count = count + 1
+
+
+cycle_length = count - previous_dish
+mod_position = (load_n - previous_dish) % cycle_length
+load_position = previous_dish + mod_position
+
+print(f'Solution to Day 14, Problem 2 is {dish_loads[load_position]}')
