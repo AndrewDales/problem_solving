@@ -1,3 +1,4 @@
+""" Solution to Project Euler 114"""
 from functools import lru_cache
 
 
