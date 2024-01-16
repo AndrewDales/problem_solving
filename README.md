@@ -33,4 +33,7 @@ Many of the [Advent of Code](https://adventofcode.com/) problems illustrate stan
 - [2023](https://adventofcode.com/2023)
   - Day 1: Trickier than usual. A good case to practice using regular expressions to find all the digit matches ([re](https://docs.python.org/3/library/re.html)). I got stuck on the second part for quite a while before noticing that some of the word strings overlap. E.g. in the example 'eightwothree' where 'eight' and 'two' share the 't'. The problem is that regular expressions are 'greedy', hence when they match 'eight', they have used up the 't' and won't match the 'two'. Googling 'overlapping regular expressions' took me [here](https://mtsknn.fi/blog/how-to-do-overlapping-matches-with-regular-expressions/), which explains 'lookahead' and 'lookbehind' regular expressions. These expressions don't consume the tokens, but instead look ahead (or behind) and match an expression if the tokens ahead of the cursor match the re. 
     - Example: `re.findall(r'(?=([a-e][a-e]))', 'abcde')` returns `['ab', 'bc', 'cd', 'de']`, whereas `re.findall(r'([a-e][a-e])', 'abcde')` only returns `['ab', 'cd']`
+
+# Project Euler
+
 ### Andrew Dales
