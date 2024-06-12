@@ -13,7 +13,7 @@ def parse_contraption(contraption_lines):
     return cells
 
 
-@dataclass(frozen=True)
+4@dataclass(frozen=True)
 class Beam:
     location: tuple[int, int]
     direction: str
