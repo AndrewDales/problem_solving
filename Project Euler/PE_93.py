@@ -4,7 +4,16 @@ import operator
 import itertools
 
 operations = (operator.add, operator.sub, operator.mul, operator.truediv)
-digit_permutations = itertools.permutations(range(10), 4)
+
+def calc_rpn(num_combo, op_perm, rpn_sequence):
+    ...
+
+op_perms = list(itertools.product(operations, repeat=3))
+num_combos = list(itertools.combinations(range(1,28), 4))
+rpn_sequences = ('nnnnooo', 'nnnonoo', 'nnnoono', 'nnonnoo', 'nnonono')
+
+
+
 
 
 def calc_words(current_words, digits):

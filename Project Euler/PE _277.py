@@ -20,17 +20,9 @@ def collatz_coefs(A, B, C, step_type):
     C = 3 * C
     return (A, B, C)
 
-def extended_euclidean(a, b):
-    """ return (gcd, s, t) such that a * s + b * t = gcd(a, b)"""
-    # if b == 0:
-    #     (gcd, s_new, t_new) = (a, 1, 0)
-    # else:
-    #     q, r = divmod(a, b)
-    #     a_new, b_new = q, r
-    #     gcd, s_old, t_old = extended_euclidean(b, r)
-    #     s_new = s_old - q
-    # return gcd
 
+def extended_euclidean(a, b):
+    """ return (s, t) such that a * s + b * t = gcd(a, b)"""
     r = [a, b]
     s = [1, 0]
     t = [0, 1]
