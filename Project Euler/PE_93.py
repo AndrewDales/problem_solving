@@ -1,57 +1,56 @@
-### NOT WORKING
-
 import operator
 import itertools
 
 operations = (operator.add, operator.sub, operator.mul, operator.truediv)
-
-def calc_rpn(num_combo, op_perm, rpn_sequence):
-    ...
-
 op_perms = list(itertools.product(operations, repeat=3))
-num_combos = list(itertools.combinations(range(1,28), 4))
+num_combos = list(itertools.combinations(range(1, 10), 4))
 rpn_sequences = ('nnnnooo', 'nnnonoo', 'nnnoono', 'nnonnoo', 'nnonono')
 
 
+def calc_rpn(num_combo, op_perm, rpn_sequence):
+    num_stack = []
+    operands = iter(num_combo)
+    operators = iter(op_perm)
 
+    try:
+        for op_type in rpn_sequence:
+            if op_type == 'n':
+                num_stack.append(next(operands))
+            if op_type == 'o':
+                b = num_stack.pop()
+                a = num_stack.pop()
+                num_stack.append(next(operators)(a, b))
+    except ZeroDivisionError:
+        output = -1
+    else:
+        output = num_stack.pop()
 
+    return output
 
-def calc_words(current_words, digits):
-    # if current_word_list is None:
-    #     current_word_list = []
-    # if operation_list is None:
-    #     operation_list = operations
+def calc_all_results(num_combo):
+    pos_values = set(int(val)
+                  for op_perm in op_perms
+                    for rpn_sequence in rpn_sequences
+                     for nums in itertools.permutations(num_combo)
+                  if (val := calc_rpn(nums, op_perm, rpn_sequence)) > 0 and val % 1 == 0)
+    return pos_values
 
-    # new_words = []
+def sequence_length(values):
+    n = 0
+    while n + 1 in values:
+        n += 1
+    return n
 
-    # if sum(callable(w) for w in current_word) < sum(isinstance(w, int) for w in current_word) - 1:
-    #     new_words = [calc_words(current_word + [op], digits, current_word_list, operation_list)
-    #                                 for op in operation_list]
-    new_words = current_words
-    if digits:
-        for digit in digits:
-            new_digits = digits.copy()
-            new_digits.remove(digit)
-            new_words = [word + [digit] for word in calc_words(current_words, new_digits)]
+max_length = 0
+max_combo = (1, 2, 3, 4)
+for i, combo in enumerate(num_combos):
+    if (n := sequence_length(calc_all_results(combo))) > max_length:
+        max_length = n
+        max_combo = list(combo)
+    #
+    # if i % 1000:
+    #     print(f'{i / len(num_combos):.2f}')
 
-    return new_words
+max_combo.sort()
 
-    # words = [[]]
-    # digits = list(digits_4)
-    # for _ in range(7):
-    #     new_words = []
-    #     add_digit = False
-    #     if digits:
-    #         digit = digits.pop()
-    #         add_digit = True
-    #     for word in words:
-    #         if add_digit:
-    #             new_words.append(word + [digit])
-    #         if sum(callable(w) for w in word) < sum(isinstance(w, int) for w in word) - 1:
-    #             op_words = [word + [op] for op in operations]
-    #             new_words += op_words
-    #     words = new_words
-    # return words
-
-
-rpn_words = calc_words([[]], [1,2,3,4])
+print(f'Solution to Project Euler 93 is {max_combo[0]}{max_combo[1]}{max_combo[2]}{max_combo[3]}')
