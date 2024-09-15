@@ -13,6 +13,7 @@ def prime_generator(max_value = 2_000_000):
         
     return primes
 
-n = 2_000_000
-prime_list = prime_generator(n)
-print(f'Sum of primes less than {n} is {sum(prime_list)}')
+if __name__  == "__main__":
+    n = 2_000_000
+    prime_list = prime_generator(n)
+    print(f'Sum of primes less than {n} is {sum(prime_list)}')
