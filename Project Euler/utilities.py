@@ -1,4 +1,5 @@
 import time
+from math import sqrt, floor
 # from PE_10 import prime_generator
 
 def sieve_of_eratoshenes(max_prime=29):
@@ -29,9 +30,41 @@ def digits_to_value(digit_array):
         val = digit_array[-1] + 10 * digits_to_value(digit_array[:-1])
     return val
 
+def factorise(n: int, prime_list=None):
+    if prime_list is None:
+        prime_list = sieve_of_eratoshenes(floor(sqrt(n)))
+    if n in prime_list:
+        prime_factors = [n]
+    else:
+        prime_factors = []
+        prime_iter = iter(prime_list)
+        p = next(prime_iter)
+
+        while True:
+            if n % p == 0:
+                prime_factors.append(p)
+                n = n // p
+            else:
+                try:
+                    p = next(prime_iter)
+                except StopIteration:
+                    prime_factors.append(n)
+                    break
+            if p**2 > n:
+                prime_factors.append(n)
+                break
+    return prime_factors
+
+
+
+
+
 if __name__  == "__main__":
-    n = 10 ** 7
-    tic = time.perf_counter()
-    primes = sieve_of_eratoshenes(n)
-    toc = time.perf_counter()
-    print('Sieve', toc-tic)
+    # n = 10 ** 6
+    # tic = time.perf_counter()
+    # primes = sieve_of_eratoshenes(n)
+    # toc = time.perf_counter()
+    # print('Sieve', toc-tic)
+    n=10_000_000
+    p_factors = factorise(n)
+    print(n, p_factors)
