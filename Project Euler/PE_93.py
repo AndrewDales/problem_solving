@@ -27,19 +27,22 @@ def calc_rpn(num_combo, op_perm, rpn_sequence):
 
     return output
 
+
 def calc_all_results(num_combo):
     pos_values = set(int(val)
-                  for op_perm in op_perms
-                    for rpn_sequence in rpn_sequences
+                     for op_perm in op_perms
+                     for rpn_sequence in rpn_sequences
                      for nums in itertools.permutations(num_combo)
-                  if (val := calc_rpn(nums, op_perm, rpn_sequence)) > 0 and val % 1 == 0)
+                     if (val := calc_rpn(nums, op_perm, rpn_sequence)) > 0 and val % 1 == 0)
     return pos_values
+
 
 def sequence_length(values):
     n = 0
     while n + 1 in values:
         n += 1
     return n
+
 
 max_length = 0
 max_combo = (1, 2, 3, 4)

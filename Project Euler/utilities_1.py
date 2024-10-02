@@ -60,11 +60,11 @@ def factorise(n: int, prime_list=None):
 
 
 if __name__  == "__main__":
-    # n = 10 ** 6
-    # tic = time.perf_counter()
-    # primes = sieve_of_eratoshenes(n)
-    # toc = time.perf_counter()
-    # print('Sieve', toc-tic)
-    n=10_000_000
-    p_factors = factorise(n)
-    print(n, p_factors)
+    n = 10 ** 7
+    tic = time.perf_counter()
+    primes = sieve_of_eratoshenes(n)
+    toc = time.perf_counter()
+    print(f'Time taken for primes up to {n:,} = {toc-tic:.3f} s')
+    # n=10_000_000
+    # p_factors = factorise(n)
+    # print(n, p_factors)
