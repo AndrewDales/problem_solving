@@ -1,5 +1,5 @@
 import math
-from utilities import sieve_of_eratoshenes, factorise
+from utilities_1 import sieve_of_eratoshenes, factorise
 
 last_row = 51
 primes = sieve_of_eratoshenes(math.floor(math.sqrt(math.comb(last_row, last_row//2))))

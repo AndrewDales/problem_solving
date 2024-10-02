@@ -1,6 +1,6 @@
 import numpy as np
 from itertools import combinations, pairwise
-from utilities import sieve_of_eratoshenes
+from utilities_1 import sieve_of_eratoshenes
 import time
 
 

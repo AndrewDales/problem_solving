@@ -1,5 +1,5 @@
 import math
-from utilities import sieve_of_eratoshenes
+from utilities_1 import sieve_of_eratoshenes
 
 max_number = 10 ** 9
 max_prime = 100
