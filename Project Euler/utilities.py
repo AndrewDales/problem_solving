@@ -18,11 +18,12 @@ def prime_sieve(max_prime=1_000_000):
             prime_check[p**2::p] = False
         p += 2
 
-    return [p for p in range(2, max_prime + 1) if prime_check[p]]
+    return np.nonzero(prime_check)[0]
+
 
 
 if __name__ == "__main__":
-    n = 10**7
+    n = 1_000_000_000
     tic = time.perf_counter()
     primes = prime_sieve(n)
     toc = time.perf_counter()
