@@ -2,7 +2,7 @@ import time
 from math import sqrt, floor
 # from PE_10 import prime_generator
 
-def sieve_of_eratoshenes(max_prime=29):
+def sieve_of_eratosthenes(max_prime=29):
     prime_check = [True] * (max_prime+1)
     # Set 0 and 1 to not prime
     prime_check[0] = False
@@ -32,7 +32,7 @@ def digits_to_value(digit_array):
 
 def factorise(n: int, prime_list=None):
     if prime_list is None:
-        prime_list = sieve_of_eratoshenes(floor(sqrt(n)))
+        prime_list = sieve_of_eratosthenes(floor(sqrt(n)))
     if n in prime_list:
         prime_factors = [n]
     else:
@@ -62,7 +62,7 @@ def factorise(n: int, prime_list=None):
 if __name__  == "__main__":
     n = 10 ** 7
     tic = time.perf_counter()
-    primes = sieve_of_eratoshenes(n)
+    primes = sieve_of_eratosthenes(n)
     toc = time.perf_counter()
     print(f'Time taken for primes up to {n:,} = {toc-tic:.3f} s')
     # n=10_000_000
