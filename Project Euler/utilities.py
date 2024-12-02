@@ -60,10 +60,6 @@ def factorise(n: int, prime_list=None):
                 prime_factors.append(p)
                 n = n // p
 
-            # if n in prime_list:
-            #     prime_factors.append(n)
-            #     break
-
             if p ** 2 > n:
                 if n != 1:
                     prime_factors.append(n)
