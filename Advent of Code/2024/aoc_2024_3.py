@@ -24,4 +24,4 @@ for statement in all_statements:
 
 
 print(f'Solution to Advent of Code 2024, problem 3a is {sum_prod}')
-print(f'Solution to Advent of Code 2024, problem 1b is {total_prob_2}')
+print(f'Solution to Advent of Code 2024, problem 3b is {total_prob_2}')
