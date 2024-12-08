@@ -8,6 +8,7 @@ with open('data/aoc_input_2024_8.txt') as file:
 
 @dataclass
 class Grid:
+    # This sets up antenna as a defaultdict. The lambda means that the default value for a new key is set to be a list
     antenna: defaultdict[str: list[tuple]] = field(default_factory=lambda: defaultdict(list))
     anti_nodes: set[tuple[int, int]] = field(default_factory=set)
     num_rows: int = 0
