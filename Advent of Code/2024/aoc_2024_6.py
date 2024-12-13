@@ -85,6 +85,7 @@ number_of_positions = len({(i, j) for i, j, _ in puzzle_map.guard_path})
 
 print(f'Solution to Day 6a is {number_of_positions}')
 
+
 loop_locations = []
 for block_location in {(i, j) for i, j, _ in puzzle_map.guard_path}:
     test_map = copy.deepcopy(initial_map)
