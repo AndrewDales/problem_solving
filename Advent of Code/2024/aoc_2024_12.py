@@ -3,31 +3,18 @@ from  dataclasses import dataclass, field
 with open('data/aoc_input_2024_12.txt') as file:
     file_contents = file.read()
 
-
-file_contents = """RRRRIICCFF
-RRRRIICCCF
-VVRRRCCFFF
-VVRCCCJFFF
-VVVVCJJCFE
-VVIVCCJJEE
-VVIIICJJEE
-MIIIIIJJEE
-MIIISIJEEE
-MMMISSJEEE"""
-
-# file_contents = """AAAA
-# ABBB
-# ABBB
-# AAAA
-# """
+# file_contents = """RRRRIICCFF
+# RRRRIICCCF
+# VVRRRCCFFF
+# VVRCCCJFFF
+# VVVVCJJCFE
+# VVIVCCJJEE
+# VVIIICJJEE
+# MIIIIIJJEE
+# MIIISIJEEE
+# MMMISSJEEE"""
 
 file_data = file_contents.strip().split('\n')
-
-# with open('data/aoc_input_2024_12_1.txt', 'w') as file:
-#     for line in file_data:
-#         file.write(",".join(line) +"\n")
-
-
 
 def neighbours(pos, rows, cols, directions=None):
     if directions is None:
@@ -48,8 +35,6 @@ class Region:
         self.find_region(pos)
         self.edges = self.find_edges()
         self.sides = self.find_sides()
-        # self.perimeter_sides_h = self.find_perimeter_sides_h()
-        # self.perimeter_sides_v = self.find_perimeter_sides_v()
 
     def find_region(self, pos):
         neighs = neighbours(pos, (0, self.grid.n_rows), (0, self.grid.n_cols))
@@ -86,7 +71,6 @@ class Region:
             sides.append(add_neighbours(new_edge))
         return sides
 
-
     @property
     def area(self):
         return len(self.cells)
@@ -105,111 +89,14 @@ class Region:
     def price(self):
         return self.area * self.perimeter
 
-    # @property
-    # def price_sides(self):
-    #     return self.area * max(self.perimeter_sides_h, self.perimeter_sides_v)
+    def price_sides(self):
+        return self.area * len(self.sides)
 
-    def find_perimeter_sides_v(self):
-        perimeter_cells = []
-        perimeter_lines = []
-        for pos in self.cells:
-            neighs = neighbours(pos, (-1, self.grid.n_rows + 1), (-1, self.grid.n_cols + 1))
-            for n_pos in neighs:
-                if n_pos not in self.cells:
-                    perimeter_cells.append(n_pos)
-
-        perimeter_cells_copy = perimeter_cells.copy()
-
-        while perimeter_cells:
-            line = []
-            cell = perimeter_cells.pop()
-            line.append(cell)
-            r, c = cell
-            if (r-1, c) in perimeter_cells or (r+1, c) in perimeter_cells:
-                d = 1
-                while (up_cell := (r-d, c)) in perimeter_cells:
-                    line.append(up_cell)
-                    perimeter_cells.remove(up_cell)
-                    d += 1
-                d = 1
-                while (down_cell := (r+d, c)) in perimeter_cells:
-                    line.append(down_cell)
-                    perimeter_cells.remove(down_cell)
-                    d += 1
-            # horizontal check
-            elif (r, c-1) in perimeter_cells or (r, c+1) in perimeter_cells:
-                d = 1
-                while (left_cell := (r, c-d)) in perimeter_cells:
-                    line.append(left_cell)
-                    perimeter_cells.remove(left_cell)
-                    d += 1
-                d = 1
-                while (right_cell := (r, c+d)) in perimeter_cells:
-                    line.append(right_cell)
-                    perimeter_cells.remove(right_cell)
-                    d += 1
-
-            perimeter_lines.append(line)
-        return len(perimeter_lines)
-
-    def find_perimeter_sides_h(self):
-        perimeter_cells = []
-        perimeter_lines = []
-        for pos in self.cells:
-            neighs = neighbours(pos, (-1, self.grid.n_rows + 1), (-1, self.grid.n_cols + 1))
-            for n_pos in neighs:
-                if n_pos not in self.cells:
-                    perimeter_cells.append(n_pos)
-
-        perimeter_cells_copy = perimeter_cells.copy()
-
-        while perimeter_cells:
-            line = []
-            cell = perimeter_cells.pop()
-            line.append(cell)
-            r, c = cell
-            # horizontal check
-            if (r, c-1) in perimeter_cells or (r, c+1) in perimeter_cells:
-                d = 1
-                while (left_cell := (r, c-d)) in perimeter_cells:
-                    line.append(left_cell)
-                    perimeter_cells.remove(left_cell)
-                    d += 1
-                d = 1
-                while (right_cell := (r, c+d)) in perimeter_cells:
-                    line.append(right_cell)
-                    perimeter_cells.remove(right_cell)
-                    d += 1
-            # vertical check
-            elif (r-1, c) in perimeter_cells or (r+1, c) in perimeter_cells:
-                d = 1
-                while (up_cell := (r-d, c)) in perimeter_cells:
-                    line.append(up_cell)
-                    perimeter_cells.remove(up_cell)
-                    d += 1
-                d = 1
-                while (down_cell := (r+d, c)) in perimeter_cells:
-                    line.append(down_cell)
-                    perimeter_cells.remove(down_cell)
-                    d += 1
-
-
-            perimeter_lines.append(line)
-        return len(perimeter_lines)
 
 @dataclass(frozen=True)
 class Edge:
     cell: tuple[int, int]
     side: str
-
-    def is_adjacent(self, other: "Edge"):
-        adjacent = False
-        if self.side == other.side:
-            if self.side in ('N', 'S') and self.cell[0] == other.cell[0] and abs(self.cell[1] - other.cell[1]) == 1:
-                adjacent = True
-            elif self.side in ('E', 'W') and self.cell[1] == other.cell[1] and abs(self.cell[0] - other.cell[0]) == 1:
-                adjacent = True
-        return adjacent
 
     def neighbours(self):
         r, c = self.cell
@@ -243,16 +130,13 @@ class Grid:
                 self.visited_cells.update(reg.cells)
 
     def find_score(self):
-        return sum(reg.price for reg in self.regions), sum(reg.price_sides for reg in self.regions)
-
-
-
+        return sum(reg.price for reg in self.regions), sum(reg.price_sides() for reg in self.regions)
 
 full_grid = Grid()
 full_grid.set_up(file_data)
 full_grid.find_regions()
 
-# prices = full_grid.find_score()
+prices = full_grid.find_score()
 
-# print(f'Solution to Day 12a is {prices[0]}')
-# print(f'Solution to Day 12a is {prices[1]}')
+print(f'Solution to Day 12a is {prices[0]}')
+print(f'Solution to Day 12a is {prices[1]}')
