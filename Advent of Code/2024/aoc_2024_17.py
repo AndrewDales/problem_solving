@@ -91,7 +91,6 @@ def out(a):
     z = x ^ 6
     return (y ^ z) % 8
 
-
 computer = Computer({'A': int(register_str[0]), 'B': int(register_str[1]), 'C': int(register_str[2])})
 instructions = tuple(Instruction(program_nums[i], program_nums[i+1]) for i in range(0,len(program_nums),2))
 
