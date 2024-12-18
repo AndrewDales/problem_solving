@@ -68,16 +68,14 @@ robot_count = prod(quadrants.count(i) for i in range(4))
 print(f'Solution to Day 14a is {robot_count}')
 
 time = 1
-while True:
+moving = True
+while moving:
     position_vectors_t = find_position(position_vectors, velocity_vectors, time)
-    # quadrants = tuple(find_quadrant(vec, width, height) for vec in position_vector_100)
-    # robot_count = [quadrants.count(i) for i in range(4)]
     if len(position_vectors_t) == len(np.unique(position_vectors_t, axis=0)):
         draw_robots(position_vectors_t, width, height)
-        break
-    # if t == 100:
-    #     assert all(position_vectors_t == position_vector_100)
-    time += 1
+        moving = False
+    else:
+        time += 1
 
 print(f'Solution to Day 14b is {time}')
 
