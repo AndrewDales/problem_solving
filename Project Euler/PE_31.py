@@ -10,7 +10,7 @@ def coins(n, coin_list):
     else:
         new_coin_list = coin_list.copy()
         coin = new_coin_list.pop()
-        num_partitions = sum(coins(n - coin * i, new_coin_list) for i in range(n // coin))
+        num_partitions = sum(coins(n - coin * i, new_coin_list) for i in range(n // coin + 1))
     return num_partitions
 
 
