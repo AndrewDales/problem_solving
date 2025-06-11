@@ -1,4 +1,9 @@
+import turtle
+
+turtle.speed(0)
+
 def l_system(level, sequence=None, rules=None):
+    """ Creates a Lindermann sequence of level, level, given an intial sequence and a dictionary of rules."""
     if sequence is None:
         sequence = 'F'
     if rules is None:
@@ -15,6 +20,27 @@ def l_system(level, sequence=None, rules=None):
             else:
                 new_sequence += symbol
         return l_system(level - 1, new_sequence, rules)
+
+def draw_sequence(command_sequence, commands, position=(-300, -300), bearing=90):
+    """ Draws a Lindermann sequence in Python turtle"""
+    def go_to_location(l_position, l_bearing):
+        turtle.penup()
+        turtle.setpos(l_position)
+        turtle.setheading(l_bearing)
+        turtle.pendown()
+
+    go_to_location(position, bearing)
+    position_stack = []
+
+    for i, command in enumerate(command_sequence):
+        if command in commands:
+            commands[command]()
+        elif command == "[":
+            position_stack.append((turtle.pos(), turtle.heading()))
+        elif command == "]":
+            position, bearing = position_stack.pop()
+            go_to_location(position, bearing)
+    return
 
 
 if __name__ == "__main__":

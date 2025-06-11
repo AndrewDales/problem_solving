@@ -1,9 +1,9 @@
 import turtle
 import turtleBeads
 from random import randint
-from l_system import l_system
+from l_system import l_system, draw_sequence
 
-DEPTH = 7
+DEPTH = 5
 side_length = 2
 
 
@@ -18,26 +18,6 @@ rules = {'F': 'FF',
 
 seed = '-X'
 
-def draw_sequence(command_sequence, position=(-300, -300), bearing=90):
-    def go_to_location(l_position, l_bearing):
-        turtle.penup()
-        turtle.setpos(l_position)
-        turtle.setheading(l_bearing)
-        turtle.pendown()
-
-    go_to_location(position, bearing)
-    position_stack = []
-
-    for i, command in enumerate(command_sequence):
-        if command in t_commands:
-            t_commands[command]()
-        if command == "[":
-            position_stack.append((turtle.pos(), turtle.heading()))
-        if command == "]":
-            position, bearing = position_stack.pop()
-            go_to_location(position, bearing)
-    return
-
 sequence = l_system(DEPTH, seed, rules)
 print(sequence)
 
@@ -46,7 +26,7 @@ screen.setup(width=1.0, height=1.0)
 screen.bgcolor('#FAF8C8')
 turtle.pencolor('green')
 turtleBeads.noTrace()
-draw_sequence(sequence)
+draw_sequence(sequence, t_commands)
 turtle.hideturtle()
 turtleBeads.showPicture()
 turtle.done()
