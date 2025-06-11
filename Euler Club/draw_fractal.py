@@ -1,7 +1,9 @@
 import turtle
+import turtleBeads
+
 from l_system import l_system
 
-side_length = 10
+side_length = 1
 
 dragon_commands = {'F': lambda : turtle.forward(side_length),
                    'G': lambda : turtle.forward(side_length),
@@ -15,11 +17,13 @@ dragon_rules = {'F': 'F+G',
 
 dragon_seed = 'F'
 
+turtleBeads.noTrace()
+dragon_sequence = l_system(20, dragon_seed, dragon_rules)
 
-dragon_sequence = l_system(9, dragon_seed, dragon_rules)
 
 turtle.speed(0)
 for command in dragon_sequence:
     dragon_commands[command]()
 
+turtleBeads.showPicture()
 turtle.done()
