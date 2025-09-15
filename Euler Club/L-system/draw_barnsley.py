@@ -3,7 +3,7 @@ import turtleBeads
 from random import randint
 from l_system import l_system, draw_sequence
 
-DEPTH = 7
+DEPTH = 8
 side_length = 1
 
 

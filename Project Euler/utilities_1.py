@@ -1,3 +1,5 @@
+""" Prime utility functions without numpy """
+
 import time
 from math import sqrt, floor
 # from PE_10 import prime_generator

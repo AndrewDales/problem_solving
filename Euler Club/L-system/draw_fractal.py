@@ -18,7 +18,7 @@ dragon_rules = {'F': 'F+G',
 dragon_seed = 'F'
 
 turtleBeads.noTrace()
-dragon_sequence = l_system(12, dragon_seed, dragon_rules)
+dragon_sequence = l_system(15, dragon_seed, dragon_rules)
 
 
 turtle.speed(0)

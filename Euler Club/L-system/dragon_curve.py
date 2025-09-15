@@ -7,7 +7,7 @@ dragon_rules = {'F': 'F+G',
 
 dragon_seed = 'F'
 
-side_length = 3
+side_length = 2
 dragon_commands = {'F': lambda : turtle.forward(side_length),
                    'G': lambda : turtle.forward(side_length),
                    '+': lambda : turtle.left(90),
