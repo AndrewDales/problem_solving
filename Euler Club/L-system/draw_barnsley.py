@@ -3,8 +3,8 @@ import turtleBeads
 from random import randint
 from l_system import l_system, draw_sequence
 
-DEPTH = 5
-side_length = 2
+DEPTH = 7
+side_length = 1
 
 
 t_commands = {'F': lambda : turtle.forward(side_length),
