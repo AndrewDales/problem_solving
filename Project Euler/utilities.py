@@ -4,6 +4,7 @@ import numpy as np
 import time
 from math import floor, sqrt , prod
 from functools import lru_cache
+from collections import Counter
 
 def prime_sieve(max_prime=1_000_000):
     # Start by creating a list of 1s indicating (initially) that all numbers are prime
@@ -45,18 +46,60 @@ def factorise(n: int, prime_list=None):
                 break
     return prime_factors
 
+def prime_factorisation(n: int, prime_list=None):
+    if prime_list is None:
+        prime_list = prime_sieve(math.ceil(sqrt(n)))
+    if n in prime_list or prime_list[0]**2 > n  or len(prime_list) == 0:
+        prime_factors = [n]
+    else:
+        while (n % (p:= int(prime_list[0])) )!= 0 and p**2 < n:
+            prime_list = prime_list[1:]
+        prime_factors = [p] + prime_factorisation(n // p, prime_list)
+    return prime_factors
+
+def prime_factors_np(n: int, prime_list=None):
+    if n == 1:
+        return np.array([], dtype=int)
+    if prime_list is None:
+        prime_list = prime_sieve(math.ceil(sqrt(n)))
+    else:
+        prime_list = prime_list[prime_list <= n]
+    prime_factors = prime_list[n % prime_list == 0]
+    if len(prime_factors) == 0:
+        return [n]
+    else:
+        return np.hstack((prime_factors, prime_factors_np(n // prod(prime_factors), prime_list)))
+
+def find_divisors(n, prime_list=None):
+    if prime_list is None:
+        prime_list = prime_sieve(math.ceil(sqrt(n)))
+    prime_factors = prime_factors_np(n, prime_list)
+    prime_counter = Counter(prime_factors)
+    divisors = [1]
+    for p, num_p in prime_counter.items():
+        divisors = [f * (p ** e) for f in divisors for e in range(num_p + 1)]
+    return np.array(divisors)
+
 
 def euler_totient(n: int, prime_list=None):
     """ Returns the Euler totient for n """
     if prime_list is None:
         prime_list = prime_sieve(n // 2)
-    p_factors = set(factorise(n, prime_list))
+    p_factors = prime_list[n % prime_list == 0]
     return n * prod(p-1 for p in p_factors) // prod(p_factors)
 
 
 if __name__ == "__main__":
-    max_p =100_000_000
-    tic = time.perf_counter()
-    primes = prime_sieve(max_p)
-    toc = time.perf_counter()
-    print(f'Time taken for primes up to {max_p:,} = {toc-tic:.3f} s')
+    # max_p =100_000_000
+    # # tic = time.perf_counter()
+    # primes = prime_sieve(max_p)
+    # # toc = time.perf_counter()
+    # # print(f'Time taken for primes up to {max_p:,} = {toc-tic:.3f} s')
+    # num = 9998171801256697
+    # # num = 1_000_000
+    # tic = time.perf_counter()
+    # prime_factors = prime_factors_np(num, primes)
+    # toc = time.perf_counter()
+    # print(f'Time taken to factorise {num:,} = {toc-tic:.3f} s')
+
+    divs = find_divisors(30)

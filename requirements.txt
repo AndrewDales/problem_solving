@@ -1,4 +1,4 @@
-numpy~=2.1.0
-pip==25.0
-setuptools==70.0.0
+numpy
+pip
+setuptools
 turtleBeads~=1.1.3
