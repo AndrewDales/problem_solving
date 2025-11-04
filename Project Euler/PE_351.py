@@ -1,15 +1,14 @@
 import time
 
-from utilities import euler_totient, prime_sieve
-from time import perf_counter
+from utilities import euler_totient, phi_sieve
+
+
+MAX_N = 100_000_000
+H = 0
+phi_vals = phi_sieve(MAX_N)
 
 tic = time.perf_counter()
-MAX_N = 100_000
-H = 0
-prime_list = prime_sieve(MAX_N)
-
-for i in range(2, MAX_N + 1):
-    H += i - euler_totient(i, prime_list)
+H = sum(i + 1 - phi_vals[i] for i in range(1, MAX_N))
 
 toc = time.perf_counter()
 print(H * 6)

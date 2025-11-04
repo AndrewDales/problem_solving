@@ -27,6 +27,34 @@ def prime_sieve(max_prime=1_000_000):
     # return the positions of all the values in prime_check that are not zero (in a 1d array)
     return np.flatnonzero(prime_check)
 
+def phi_sieve(n=100):
+    # primes = prime_sieve(n)
+    phi = np.arange(0, n + 1, dtype=int)
+    #
+    # for p in primes[primes <= n // 2]:
+    #     phi[p*2::p] = phi[p*2::p] * (p-1) // p
+    #
+    # phi[1] = 0
+    # phi[primes] -= 1
+    # phi = phi[1:]
+
+
+    phi[4::2] = phi[4::2] // 2
+    m = 3
+
+    while m * 2 <= n:
+        # m is prime if the phi[m] == m-a
+        if phi[m] == m:
+            phi[m*2::m] = phi[m*2::m] * (m-1) // m
+        m += 2
+
+    phi = phi[1:]
+    phi[phi == np.arange(1, n+1)] -= 1
+
+
+    return phi
+
+
 
 def factorise(n: int, prime_list=None):
     if prime_list is None:
@@ -80,14 +108,22 @@ def find_divisors(n, prime_list=None):
         divisors = [f * (p ** e) for f in divisors for e in range(num_p + 1)]
     return np.array(divisors)
 
+def find_divisors_np(n):
+    candidates = np.arange(1, n + 1, dtype=int)
+    return candidates[n % candidates == 0]
+
 
 def euler_totient(n: int, prime_list=None):
     """ Returns the Euler totient for n """
+    if n == 1:
+        return 0
     if prime_list is None:
         prime_list = prime_sieve(n // 2)
     p_factors = prime_list[n % prime_list == 0]
-    return n * prod(p-1 for p in p_factors) // prod(p_factors)
 
+    return n * prod(p-1 for p in p_factors) // prod(p_factors)
+    return n * np.prod(p_factors -1) // np.prod(p_factors)
+#
 
 if __name__ == "__main__":
     # max_p =100_000_000
@@ -101,5 +137,14 @@ if __name__ == "__main__":
     # prime_factors = prime_factors_np(num, primes)
     # toc = time.perf_counter()
     # print(f'Time taken to factorise {num:,} = {toc-tic:.3f} s')
-
-    divs = find_divisors(30)
+    n = 100_000
+    # primes = prime_sieve(n)
+    # tic = time.perf_counter()
+    # phi_1 = [euler_totient(i, primes) for i in range(1, n + 1)]
+    # toc = time.perf_counter()
+    # print(toc-tic)
+    tic = time.perf_counter()
+    phi_2 = phi_sieve(n)
+    toc = time.perf_counter()
+    print(toc - tic)
+    assert sum(phi_2) == 3039650753
