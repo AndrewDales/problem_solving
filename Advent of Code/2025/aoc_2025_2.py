@@ -7,7 +7,7 @@ with open('data/aoc_input_2025_2.txt', 'r') as file:
 def find_invalid_n(start, stop, n):
     """ Find values in range by repeating n digits """
     num_digits = len(str(start))
-    if n >= num_digits or num_digits % n != 0:
+    if n <= 0 or n >= num_digits or num_digits % n != 0:
         return set()
     # Get the first n digits of start and end numbers
     start_part = start // (10 ** (num_digits - n))
