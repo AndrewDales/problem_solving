@@ -1,7 +1,7 @@
 import time
 from utilities import prime_sieve, find_divisors_np
 
-n = 10000
+n = 100_000
 primes = prime_sieve(n)
 prime_set = set(primes)
 

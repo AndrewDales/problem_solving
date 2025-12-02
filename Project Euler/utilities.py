@@ -122,29 +122,15 @@ def euler_totient(n: int, prime_list=None):
     p_factors = prime_list[n % prime_list == 0]
 
     return n * prod(p-1 for p in p_factors) // prod(p_factors)
-    return n * np.prod(p_factors -1) // np.prod(p_factors)
-#
+
+
+def time_check(n=10_000_000):
+    # With numpy
+    tic = time.perf_counter()
+    primes = prime_sieve(n)
+    toc = time.perf_counter()
+    print(f'Primes up to {n:,} calculated in {toc - tic:.3f}s - with numpy')
 
 if __name__ == "__main__":
-    # max_p =100_000_000
-    # # tic = time.perf_counter()
-    # primes = prime_sieve(max_p)
-    # # toc = time.perf_counter()
-    # # print(f'Time taken for primes up to {max_p:,} = {toc-tic:.3f} s')
-    # num = 9998171801256697
-    # # num = 1_000_000
-    # tic = time.perf_counter()
-    # prime_factors = prime_factors_np(num, primes)
-    # toc = time.perf_counter()
-    # print(f'Time taken to factorise {num:,} = {toc-tic:.3f} s')
-    n = 100_000
-    # primes = prime_sieve(n)
-    # tic = time.perf_counter()
-    # phi_1 = [euler_totient(i, primes) for i in range(1, n + 1)]
-    # toc = time.perf_counter()
-    # print(toc-tic)
-    tic = time.perf_counter()
-    phi_2 = phi_sieve(n)
-    toc = time.perf_counter()
-    print(toc - tic)
-    assert sum(phi_2) == 3039650753
+    max_n = 100_000_000
+    time_check(max_n)
