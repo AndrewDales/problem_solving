@@ -4,7 +4,7 @@ from itertools import pairwise
 from collections import Counter
 import math
 
-with open('data/aoc_input_2025_9_test.txt', 'r') as file:
+with open('data/aoc_input_2025_9.txt', 'r') as file:
     coords = [tuple(int(i) for i in line.strip().split(',')) for line in file]
 
 def find_rect_size(coord_1, coord_2):
@@ -52,8 +52,14 @@ def red_tile_inside(a, b, red_tile_coords):
     return any(x_min < x < x_max and y_min < y < y_max for x, y in red_tile_coords)
 
 def check_inner_rect(a, b, lines):
-    inside_point = ((a[0] + b[0])//2, (a[1] + b[1])//2)
-    return check_inside(inside_point, lines)
+    x_min, x_max = sorted((a[0], b[0]))
+    y_min, y_max = sorted((a[1], b[1]))
+    mid_point = ((a[0] + b[0])//2, (a[1] + b[1])//2)
+    return (check_inside((x_min + 1, y_min + 1), lines) and
+            check_inside((x_min + 1, y_max - 1), lines) and
+            check_inside((x_max- 1, y_max - 1), lines) and
+            check_inside((x_max - 1, y_min + 1), lines) and
+            check_inside(mid_point, lines))
 
 rectangles.sort(reverse=True)
 
@@ -68,13 +74,13 @@ for rect in rectangles:
     area, corners = rect
     r1, r2 = corners
     if not red_tile_inside(r1, r2, coords) and check_inner_rect(r1, r2, all_lines):
-        mid_x = (r1[0] + r2[0])//2
-        mid_y = (r1[1] + r2[1])//2
-        if (check_inside((mid_x, r1[1]), all_lines) and
-                check_inside((mid_x, r2[1]), all_lines) and
-                check_inside((r1[0], mid_y), all_lines) and
-                check_inside((r2[0], mid_y), all_lines)):
-            break
+        # mid_x = (r1[0] + r2[0])//2
+        # mid_y = (r1[1] + r2[1])//2
+        # if (check_inside((mid_x, r1[1]), all_lines) and
+        #         check_inside((mid_x, r2[1]), all_lines) and
+        #         check_inside((r1[0], mid_y), all_lines) and
+        #         check_inside((r2[0], mid_y), all_lines)):
+        break
 
 
 print(f'Solution to Day 8, part 1 is {area}')
