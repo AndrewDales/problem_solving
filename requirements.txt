@@ -2,3 +2,4 @@ numpy
 pip
 setuptools
 turtleBeads~=1.1.3
+matplotlib

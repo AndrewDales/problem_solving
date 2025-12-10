@@ -1,86 +1,85 @@
 import numpy as np
 from itertools import pairwise
-
-from collections import Counter
-import math
+from matplotlib import pyplot as plt
 
 with open('data/aoc_input_2025_9.txt', 'r') as file:
     coords = [tuple(int(i) for i in line.strip().split(',')) for line in file]
 
 def find_rect_size(coord_1, coord_2):
-    return (abs(coord_1[0] - coord_2[0]) + 1) * ((abs(coord_1[1] - coord_2[1]) + 1))
+    return (abs(coord_1[0] - coord_2[0]) + 1) * (abs(coord_1[1] - coord_2[1]) + 1)
 
 def find_lines(coord_list):
     # Add the first coord to the end to make a loop
     coord_list.append(coord_list[0])
-    h_lines = set()
-    v_lines = set()
+    lines = set()
     for c_1, c_2 in pairwise(coord_list):
-        # Veritical lines
+        # Vertical lines
         if c_1[0] == c_2[0]:
             y_min = min(c_1[1], c_2[1])
             y_max = max(c_1[1], c_2[1])
             line = (c_1[0], range(y_min, y_max + 1))
-            v_lines.add(line)
+        # Horizontal lines
         elif c_1[1] == c_2[1]:
             x_min = min(c_1[0], c_2[0])
             x_max = max(c_1[0], c_2[0])
             line = (range(x_min, x_max + 1), c_1[1])
-            h_lines.add(line)
         else:
             print(f'Warning: {c_1}, {c_2} not on horizontal or vertical line')
+            line = []
+        lines.add(line)
     coord_list.pop()
-    return h_lines, v_lines
+    return lines
 
-def check_inside(point, lines):
+def check_inside(point):
     x, y = point
-    h_lines, v_lines = lines
     lines_left = {v_line for v_line in v_lines
                 if (v_line[0] <= x and y in v_line[1])}
     lines_below = {h_line for h_line in h_lines
                    if (x in h_line[0] and y <= h_line[1])}
     return len(lines_left) % 2 == 1 and len(lines_below) % 2 == 1
 
+def check_range_intersection(a, b, c, d):
+    return a < c < b or a < d < b or (c <= a and d >= b)
+
+def check_line_inside(corner_points, line):
+    a, b = corner_points
+    x_min = min(a[0], b[0])
+    x_max = max(a[0], b[0])
+    y_min = min(a[1], b[1])
+    y_max = max(a[1], b[1])
+    # horizontal line
+    if isinstance(line[0], range):
+        return y_min < line[1] < y_max and check_range_intersection(x_min, x_max, min(line[0]), max(line[0]))
+    else:
+        return x_min < line[0] < x_max and check_range_intersection(y_min, y_max, min(line[1]), max(line[1]))
+
+def check_all_lines(corner_points):
+    return any(check_line_inside(corner_points, line) for line in all_lines)
+
 rectangles = [(find_rect_size(coords[i], coords[j]), (coords[i], coords[j]))
              for i in range(len(coords))
              for j in range(i+1, len(coords))]
-
-def red_tile_inside(a, b, red_tile_coords):
-    x_min, x_max = sorted((a[0], b[0]))
-    y_min, y_max = sorted((a[1], b[1]))
-
-    return any(x_min < x < x_max and y_min < y < y_max for x, y in red_tile_coords)
-
-def check_inner_rect(a, b, lines):
-    x_min, x_max = sorted((a[0], b[0]))
-    y_min, y_max = sorted((a[1], b[1]))
-    mid_point = ((a[0] + b[0])//2, (a[1] + b[1])//2)
-    return (check_inside((x_min + 1, y_min + 1), lines) and
-            check_inside((x_min + 1, y_max - 1), lines) and
-            check_inside((x_max- 1, y_max - 1), lines) and
-            check_inside((x_max - 1, y_min + 1), lines) and
-            check_inside(mid_point, lines))
 
 rectangles.sort(reverse=True)
 
 print(f'Solution to Day 8, part 1 is {rectangles[0][0]}')
 
 all_lines = find_lines(coords)
+h_lines = {line for line in all_lines if isinstance(line[0], range)}
+v_lines = {line for line in all_lines if isinstance(line[1], range)}
 area = 0
-
-check_inside((5, 3), all_lines)
+corners = ((0, 0), (0, 0))
 
 for rect in rectangles:
     area, corners = rect
-    r1, r2 = corners
-    if not red_tile_inside(r1, r2, coords) and check_inner_rect(r1, r2, all_lines):
-        # mid_x = (r1[0] + r2[0])//2
-        # mid_y = (r1[1] + r2[1])//2
-        # if (check_inside((mid_x, r1[1]), all_lines) and
-        #         check_inside((mid_x, r2[1]), all_lines) and
-        #         check_inside((r1[0], mid_y), all_lines) and
-        #         check_inside((r2[0], mid_y), all_lines)):
+    mid_point = ((corners[0][0] + corners[1][0]) // 2, (corners[0][1] + corners[1][1]) // 2)
+    if not check_all_lines(corners) and check_inside(mid_point):
         break
 
+print(f'Solution to Day 8, part 2 is {area}')
 
-print(f'Solution to Day 8, part 1 is {area}')
+coords_np = np.array(coords)
+plt.fill(coords_np[:,0], coords_np[:,1], edgecolor='red', fc=('green', 0.3))
+r1, r2 = corners
+plt.fill([r1[0], r1[0], r2[0], r2[0]], [r2[1], r1[1], r1[1], r2[1]], edgecolor='black', fc=('grey', 0.3))
+plt.show()
