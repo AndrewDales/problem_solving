@@ -33,7 +33,3 @@ poly = Polymer(starting_code, code_dict)
 poly.insertion_steps(10)
 
 print(f"Output Solution 1: {poly.max_min_score()}")
-
-poly.insertion_steps(30)
-
-print(f"Output Solution 1: {poly.max_min_score()}")

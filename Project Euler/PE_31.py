@@ -32,13 +32,32 @@ def coins(n, coin_list):
     return num_partitions
 
 
+@lru_cache
+def coin_partitions(target: int, coin_list: frozenset[int]):
+    # Base case
+    if target == 0:
+        num_ways = 1
+    elif target < 0 or not coin_list:
+        num_ways = 0
+    else:
+        # Recursive relationship
+        # Either the highest value coin is used, in which case reduce the target by its value
+        # or the highest value coin is not used, in which case take it out of the coin_list
+        high_coin = max(coin_list)
+        num_ways = coin_partitions(target - high_coin, coin_list) + coin_partitions(target, coin_list - {high_coin})
+
+    return num_ways
+
 if __name__ == '__main__':
-    # UK coins in pence, stored as a tuple so they remain hashable for lru_cache.
-    uk_coins = (1, 2, 5, 10, 20, 50, 100, 200)
+    # Number of ways to get 20p using only 1p and 2p
+    print(coin_partitions(20, frozenset({1,2})))
+
+    # UK coins in pence, stored in a frozen set so they remain hashable for lru_cache.
+    uk_coins = frozenset({1, 2, 5, 10, 20, 50, 100, 200})
 
     # Start the timer before running the recursive counting function.
     start_time = time.time()
-    num_parts = coins(200, uk_coins)
+    num_parts = coin_partitions(200, frozenset(uk_coins))
     end_time = time.time()
 
     # Print the number of combinations and the runtime for comparison/debugging.
