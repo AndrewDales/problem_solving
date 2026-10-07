@@ -50,7 +50,7 @@ def coin_partitions(target: int, coin_list: frozenset[int]):
 
 if __name__ == '__main__':
     # Number of ways to get 20p using only 1p and 2p
-    print(coin_partitions(20, frozenset({1,2})))
+    print(coin_partitions(20, frozenset({1,2, 5})))
 
     # UK coins in pence, stored in a frozen set so they remain hashable for lru_cache.
     uk_coins = frozenset({1, 2, 5, 10, 20, 50, 100, 200})

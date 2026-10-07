@@ -108,8 +108,9 @@ def find_divisors(n, prime_list=None):
         divisors = [f * (p ** e) for f in divisors for e in range(num_p + 1)]
     return np.array(divisors)
 
-def find_divisors_np(n):
-    candidates = np.arange(1, n + 1, dtype=int)
+def find_divisors_np(n: int, proper: bool=False):
+    end_point = n + 1 if not proper else n
+    candidates = np.arange(1, end_point, dtype=int)
     return candidates[n % candidates == 0]
 
 
